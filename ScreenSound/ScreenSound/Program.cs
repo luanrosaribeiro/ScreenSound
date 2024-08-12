@@ -71,6 +71,11 @@ void RegistrarBanda()
 void ListarBandas()
 {
     Console.Clear();
+    Console.WriteLine("Lista das Bandas Cadastradas:");
+    Listar(listaDeBandas);
+    Console.WriteLine("Pressine qualquer tecla para voltar ao menu principal!");
+    Console.ReadKey();
+    ExibirOpcoesDoMenu();
 }
 
 
@@ -81,9 +86,9 @@ void Cadastrar(List<string> lista, string valor)
 
 void Listar(List<string> lista)
 {
-    foreach (string valor in lista)
+    foreach (string item in lista)
     {
-
+        Console.WriteLine($"->{item}");
     }
 }
 
