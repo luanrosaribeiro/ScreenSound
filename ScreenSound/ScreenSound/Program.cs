@@ -1,9 +1,10 @@
 ﻿//Screen Sound
 
 using System.Security;
+using System.Threading.Tasks.Dataflow;
 using System.Xml.Serialization;
 
-Dictionary<string,List<string>> dicionarioDeBandas = new Dictionary<string,List<string>>();
+Dictionary<string,List<int>> dicionarioDeBandas = new Dictionary<string,List<int>>();
 
 void ExibirMensagemDeBoasVindas()
 {
@@ -40,10 +41,10 @@ void ExibirOpcoesDoMenu()
             ListarBandas();
             break;
         case "3":
-            Console.WriteLine("Opção escolhida: " + opcaoEscolhida);
+            RegistraAvaliacao();
             break;
         case "4":
-            Console.WriteLine("Opção escolhida: " + opcaoEscolhida);
+            MediaDeAvaliacao();
             break;
         case "0":
             Console.WriteLine("Programa encerrado.");
@@ -72,7 +73,7 @@ void RegistrarBanda()
     ExibeTituloMenus("Resgistro de Banda");
     Console.Write("Digite o nome da Banda: ");
     nomeBanda = Console.ReadLine()!;
-    Cadastrar(nomeBanda, null, dicionarioDeBandas);
+    Cadastrar(nomeBanda, 0, dicionarioDeBandas);
     Console.WriteLine("A banda {0} foi registrado com sucesso!", nomeBanda);
     Thread.Sleep(2000);
     Console.Clear();
@@ -81,12 +82,12 @@ void RegistrarBanda()
 
 void RegistraAvaliacao()
 {
-    string avaliacao;
+    int avaliacao;
     string banda;
     Console.Clear();
     ExibeTituloMenus("Avaliar Banda");
     banda = VerificaBanda(dicionarioDeBandas);
-    avaliacao = Console.ReadLine()!;
+    avaliacao = int.Parse(Console.ReadLine()!);
     Cadastrar(banda,avaliacao,dicionarioDeBandas);
     Console.WriteLine("Avaliação registrada com sucesso!");
     Thread.Sleep(2000);
@@ -94,7 +95,7 @@ void RegistraAvaliacao()
     ExibirOpcoesDoMenu();
 }
 
-string VerificaBanda(Dictionary<string,List<string>> dicionario)
+string VerificaBanda(Dictionary<string,List<int>> dicionario)
 {
     Console.Write("Digite o nome da Banda que deseja avaliar: ");
     string banda = Console.ReadLine()!;
@@ -126,6 +127,18 @@ void ListarBandas()
     RetornarMenu();
 }
 
+void MediaDeAvaliacao()
+{
+    Console.Clear();
+    ExibeTituloMenus("Média De avaliação das Bandas");
+    string banda = VerificaBanda(dicionarioDeBandas);
+    List<int> notas = new List<int>();
+    notas = dicionarioDeBandas[banda];
+    Console.WriteLine($"A média de avaliações da banda {banda} é: {notas.Average()}");
+    Thread.Sleep(4000);
+    RetornarMenu();
+}
+
 void RetornarMenu()
 {
     Console.WriteLine("Pressine qualquer tecla para voltar ao menu principal!");
@@ -135,22 +148,22 @@ void RetornarMenu()
 
 }
 
-void Cadastrar(string chave, string valor, Dictionary<string,List<string>> dicionario)
+void Cadastrar(string chave, int valor, Dictionary<string,List<int>> dicionario)
 {
-    if (chave != null && valor != null)
+    if (chave != null && valor != 0)
     {
         dicionario[chave].Add(valor);
         return;
     }
-    else if (chave != null && valor == null)
+    else if (chave != null && valor == 0)
     {
-        dicionario.Add(chave, new List<string>());
+        dicionario.Add(chave, new List<int>());
         return;
     }
 }
 
 
-void Listar(Dictionary<string, List<string>> dicionario)
+void Listar(Dictionary<string, List<int>> dicionario)
 {
     foreach (string item in dicionario.Keys)
     {
